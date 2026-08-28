@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Withdraw - Top 4</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  background: #0f172a;
+  color: white;
+}
+
+.card {
+  max-width: 500px;
+  margin: 40px auto;
+  background: #1e293b;
+  padding: 30px;
+  border-radius: 18px;
+}
+
+h1 {
+  text-align: center;
+}
+
+.balance {
+  text-align: center;
+  color: #22c55e;
+  font-size: 24px;
+  font-weight: bold;
+  margin: 20px 0;
+}
+
+label {
+  display: block;
+  margin-top: 15px;
+  margin-bottom: 6px;
+}
+
+input,
+select {
+  width: 100%;
+  padding: 13px;
+  border: none;
+  border-radius: 9px;
+  background: #334155;
+  color: white;
+  font-size: 16px;
+}
+
+button {
+  width: 100%;
+  padding: 14px;
+  margin-top: 15px;
+  border: none;
+  border-radius: 10px;
+  background: #22c55e;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.back {
+  background: #475569;
+}
+
+.note {
+  color: #cbd5e1;
+  text-align: center;
+  line-height: 1.5;
+}
+
+.message {
+  text-align: center;
+  margin-top: 15px;
+  color: #facc15;
+  line-height: 1.5;
+}
+
+.success {
+  color: #22c55e;
+}
+
+.error {
+  color: #f87171;
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+
+<h1>Withdraw</h1>
+
+<div class="balance">
+Wallet: <span id="wallet">0</span> UGX
+</div>
+
+<p class="note">
+Enter the amount you want to withdraw and the Mobile Money number that should receive the funds.
+</p>
+
+<label>Payment Method</label>
+
+<select id="method">
+  <option value="Airtel Money">Airtel Money</option>
+  <option value="MTN Mobile Money">MTN Mobile Money</option>
+</select>
+
+<label>Mobile Money Number</label>
+
+<input
+  id="phone"
+  type="tel"
+  placeholder="Enter Mobile Money number"
+  maxlength="15"
+  autocomplete="tel"
+>
+
+<label>Amount (UGX)</label>
+
+<input
+  id="amount"
+  type="number"
+  min="1"
+  placeholder="Enter withdrawal amount"
+>
+
+<button onclick="withdraw()">
+Submit Withdrawal
+</button>
+
+<button
+  class="back"
+  onclick="window.location.href='account.html'">
+
+Back to Account
+
+</button>
+
+<div id="message" class="message"></div>
+
+</div>
+
+<script>
+
+let wallet =
+Number(localStorage.getItem("top4Wallet")) || 0;
+
+document.getElementById("wallet").textContent =
+wallet.toLocaleString();
+
+
+function withdraw() {
+
+  const amount =
+    Number(document.getElementById("amount").value);
+
+  const phone =
+    document.getElementById("phone").value.trim();
+
+  const method =
+    document.getElementById("method").value;
+
+  const message =
+    document.getElementById("message");
+
+
+  message.className = "message";
+
+
+  if (!phone) {
+
+    message.textContent =
+      "Please enter your Mobile Money number.";
+
+    message.className =
+      "message error";
+
+    return;
+  }
+
+
+  if (!amount || amount <= 0) {
+
+    message.textContent =
+      "Enter a valid withdrawal amount.";
+
+    message.className =
+      "message error";
+
+    return;
+  }
+
+
+  if (amount > wallet) {
+
+    message.textContent =
+      "Insufficient wallet balance.";
+
+    message.className =
+      "message error";
+
+    return;
+  }
+
+
+  /*
+    DEMO ONLY:
+    The withdrawal is recorded locally.
+    Real withdrawals must be processed and verified
+    securely by the backend/payment provider.
+  */
+
+
+  wallet -= amount;
+
+
+  localStorage.setItem(
+    "top4Wallet",
+    wallet.toString()
+  );
+
+
+  const withdrawals =
+    JSON.parse(
+      localStorage.getItem("top4Withdrawals")
+    ) || [];
+
+
+  withdrawals.push({
+
+    amount: amount,
+
+    method: method,
+
+    phone: phone,
+
+    status: "Pending Verification",
+
+    date: new Date().toISOString()
+
+  });
+
+
+  localStorage.setItem(
+    "top4Withdrawals",
+    JSON.stringify(withdrawals)
+  );
+
+
+  document.getElementById("wallet")
+    .textContent =
+    wallet.toLocaleString();
+
+
+  message.innerHTML =
+    "Withdrawal request submitted successfully.<br>" +
+    "Status: Pending Verification.";
+
+  message.className =
+    "message success";
+
+
+  document.getElementById("amount").value = "";
+
+  document.getElementById("phone").value = "";
+
+}
+
+</script>
+
+</body>
+</html>
