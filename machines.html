@@ -1,0 +1,2019 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Machines - TOP-4</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    font-family:Arial,sans-serif;
+    background:
+        radial-gradient(circle at top,#172554 0,#0f172a 45%,#020617 100%);
+    color:white;
+    min-height:100vh;
+}
+
+header{
+    background:rgba(2,6,23,.95);
+    border-bottom:1px solid #334155;
+    padding:18px 20px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:15px;
+    position:sticky;
+    top:0;
+    z-index:10;
+}
+
+.logo{
+    font-size:25px;
+    font-weight:900;
+    letter-spacing:2px;
+}
+
+.logo span{
+    color:#facc15;
+}
+
+nav a{
+    color:white;
+    text-decoration:none;
+    margin-left:15px;
+    font-weight:bold;
+}
+
+nav a:hover{
+    color:#facc15;
+}
+
+.container{
+    max-width:1100px;
+    margin:auto;
+    padding:28px 15px 60px;
+}
+
+h1{
+    font-size:32px;
+    margin-bottom:8px;
+}
+
+.subtitle{
+    color:#94a3b8;
+    margin-bottom:25px;
+}
+
+.summary{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:15px;
+    margin-bottom:20px;
+}
+
+.summary-card{
+    background:linear-gradient(145deg,#1e293b,#0f172a);
+    border:1px solid #334155;
+    border-radius:18px;
+    padding:22px;
+    text-align:center;
+    box-shadow:0 12px 30px rgba(0,0,0,.25);
+}
+
+.summary-card span{
+    display:block;
+    color:#94a3b8;
+    margin-bottom:8px;
+    font-size:13px;
+}
+
+.summary-card strong{
+    font-size:25px;
+}
+
+.refresh{
+    width:100%;
+    padding:15px;
+    border:none;
+    border-radius:12px;
+    background:linear-gradient(135deg,#22c55e,#16a34a);
+    color:white;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+    margin-bottom:25px;
+}
+
+.refresh:hover{
+    opacity:.9;
+}
+
+.machine{
+    position:relative;
+    overflow:hidden;
+    background:linear-gradient(145deg,#1e293b,#0f172a);
+    border:1px solid #334155;
+    border-radius:20px;
+    padding:23px;
+    margin-bottom:20px;
+    box-shadow:0 15px 40px rgba(0,0,0,.3);
+}
+
+.machine::before{
+    content:"";
+    position:absolute;
+    left:0;
+    top:0;
+    bottom:0;
+    width:4px;
+    background:#22c55e;
+}
+
+.machine.pending-card::before{
+    background:#eab308;
+}
+
+.machine-title{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+    margin-bottom:20px;
+}
+
+.machine-title h2{
+    font-size:21px;
+}
+
+.status{
+    padding:7px 13px;
+    border-radius:20px;
+    font-size:13px;
+    font-weight:bold;
+}
+
+.verified{
+    background:#14532d;
+    color:#bbf7d0;
+    border:1px solid #22c55e;
+}
+
+.pending{
+    background:#713f12;
+    color:#fef08a;
+    border:1px solid #eab308;
+}
+
+.info{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:11px;
+}
+
+.info div{
+    background:rgba(51,65,85,.65);
+    padding:13px;
+    border-radius:11px;
+    border:1px solid rgba(148,163,184,.1);
+}
+
+.label{
+    color:#94a3b8;
+    font-size:11px;
+    margin-bottom:6px;
+    letter-spacing:.5px;
+}
+
+.value{
+    font-weight:bold;
+    word-break:break-word;
+}
+
+.progress-area{
+    margin-top:20px;
+}
+
+.progress-head{
+    display:flex;
+    justify-content:space-between;
+    margin-bottom:8px;
+}
+
+.progress-bar{
+    height:13px;
+    background:#475569;
+    border-radius:20px;
+    overflow:hidden;
+}
+
+.progress{
+    height:100%;
+    background:linear-gradient(90deg,#22c55e,#86efac);
+    border-radius:20px;
+    transition:width .5s ease;
+}
+
+.working-text{
+    margin-top:10px;
+    color:#86efac;
+}
+
+.pending-text{
+    margin-top:18px;
+    color:#facc15;
+}
+
+.message{
+    text-align:center;
+    padding:35px 20px;
+    background:#1e293b;
+    border:1px solid #334155;
+    border-radius:16px;
+    color:#cbd5e1;
+}
+
+.error{
+    color:#f87171;
+}
+
+.login-button{
+    display:inline-block;
+    margin-top:15px;
+    padding:12px 20px;
+    background:#22c55e;
+    color:white;
+    text-decoration:none;
+    border-radius:10px;
+    font-weight:bold;
+}
+
+@media(max-width:700px){
+
+    header{
+        padding:15px;
+    }
+
+    .logo{
+        font-size:21px;
+    }
+
+    nav a{
+        margin-left:8px;
+        font-size:14px;
+    }
+
+    h1{
+        font-size:27px;
+    }
+
+    .summary{
+        grid-template-columns:1fr;
+    }
+
+    .info{
+        grid-template-columns:1fr;
+    }
+
+    .machine-title{
+        flex-direction:column;
+        align-items:flex-start;
+    }
+}
+
+.view-details{
+    display:block;
+    width:100%;
+    margin-top:20px;
+    padding:13px;
+    border-radius:8px;
+    background:#111827;
+    color:white;
+    text-align:center;
+    text-decoration:none;
+    font-size:15px;
+    font-weight:bold;
+}
+
+.view-details:hover{
+    opacity:.85;
+}
+
+    .machine-image{
+        width:100%;
+        margin:18px 0;
+        border-radius:16px;
+        overflow:hidden;
+        background:#f5f5f5;
+        border:1px solid rgba(0,0,0,0.08);
+    }
+
+    .machine-image img{
+        display:block;
+        width:100%;
+        height:240px;
+        object-fit:cover;
+        object-position:center;
+    }
+
+    @media (max-width:600px){
+        .machine-image img{
+            height:200px;
+        }
+    }
+
+</style>
+
+
+
+<style id="top4-final-cy-visual">
+/* =========================================================
+   TOP-4 — FINAL CY SMART MACHINE INTERFACE
+   Visual layer only. Existing API/order logic is preserved.
+   ========================================================= */
+
+:root{
+    --cy:#22d3ee;
+    --cy-soft:#67e8f9;
+    --cy-blue:#38bdf8;
+    --cy-deep:#06111f;
+    --cy-panel:rgba(7,18,32,.88);
+    --cy-line:rgba(34,211,238,.22);
+    --cy-white:#f8fafc;
+    --cy-muted:#94a3b8;
+}
+
+body{
+    background:
+        radial-gradient(circle at 50% -10%,rgba(34,211,238,.12),transparent 34%),
+        linear-gradient(180deg,#020617 0%,#050b16 55%,#020617 100%) !important;
+}
+
+#machines{
+    width:min(100%,560px);
+    margin:18px auto 40px;
+    display:grid;
+    gap:16px;
+}
+
+/* Compact smart CY card */
+.t4-cy-card{
+    position:relative;
+    overflow:hidden;
+    min-height:0 !important;
+    padding:14px !important;
+    border:1px solid var(--cy-line) !important;
+    border-radius:22px !important;
+    background:
+        radial-gradient(circle at 50% 32%,rgba(34,211,238,.10),transparent 35%),
+        linear-gradient(145deg,rgba(10,25,42,.96),rgba(2,8,23,.98)) !important;
+    box-shadow:
+        0 0 0 1px rgba(255,255,255,.025) inset,
+        0 14px 40px rgba(0,0,0,.35),
+        0 0 24px rgba(34,211,238,.08) !important;
+}
+
+/* fine luminous border */
+.t4-cy-card::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    border-radius:22px;
+    pointer-events:none;
+    background:linear-gradient(
+        135deg,
+        rgba(103,232,249,.18),
+        transparent 25%,
+        transparent 72%,
+        rgba(34,211,238,.10)
+    );
+}
+
+/* star field */
+.t4-cy-card::before{
+    content:"✦  ·  ✧     ✦       ·     ✧  ✦";
+    position:absolute;
+    top:7px;
+    right:10px;
+    color:rgba(165,243,252,.55);
+    font-size:10px;
+    letter-spacing:5px;
+    white-space:nowrap;
+    animation:t4StarFloat 3.5s ease-in-out infinite;
+    pointer-events:none;
+}
+
+@keyframes t4StarFloat{
+    0%,100%{opacity:.35;transform:translateY(0)}
+    50%{opacity:.9;transform:translateY(-3px)}
+}
+
+/* heading */
+.t4-cy-card h2{
+    position:relative;
+    z-index:2;
+    margin:0 !important;
+    color:var(--cy-white) !important;
+    font-size:18px !important;
+    font-weight:800 !important;
+    letter-spacing:-.3px;
+}
+
+/* image zone */
+.t4-cy-card .t4-machine-image,
+.t4-cy-card .machine-image{
+    position:relative;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    width:100%;
+    height:145px;
+    margin:10px 0 12px;
+    overflow:hidden;
+    border-radius:17px;
+    background:
+        radial-gradient(circle at 50% 48%,rgba(34,211,238,.18),transparent 45%),
+        linear-gradient(180deg,rgba(8,25,42,.8),rgba(2,8,23,.72));
+    border:1px solid rgba(34,211,238,.12);
+}
+
+/* machine glow */
+.t4-cy-card .t4-machine-image::before,
+.t4-cy-card .machine-image::before{
+    content:"";
+    position:absolute;
+    width:120px;
+    height:120px;
+    border-radius:50%;
+    background:rgba(34,211,238,.16);
+    filter:blur(30px);
+    animation:t4MachineGlow 3s ease-in-out infinite;
+}
+
+@keyframes t4MachineGlow{
+    0%,100%{transform:scale(.85);opacity:.45}
+    50%{transform:scale(1.12);opacity:.85}
+}
+
+.t4-cy-card img{
+    position:relative;
+    z-index:2;
+    max-width:82%;
+    max-height:132px;
+    object-fit:contain;
+    filter:
+        drop-shadow(0 0 8px rgba(34,211,238,.30))
+        drop-shadow(0 12px 22px rgba(0,0,0,.45));
+}
+
+/* compact information grid */
+.t4-cy-card .t4-info,
+.t4-cy-card .machine-info{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:8px;
+}
+
+.t4-cy-card .t4-info > div,
+.t4-cy-card .machine-info > div{
+    padding:9px 10px;
+    border:1px solid rgba(148,163,184,.10);
+    border-radius:12px;
+    background:rgba(255,255,255,.025);
+}
+
+.t4-cy-card small,
+.t4-cy-card .label{
+    display:block;
+    margin-bottom:3px;
+    color:var(--cy-muted);
+    font-size:10px;
+    text-transform:uppercase;
+    letter-spacing:.7px;
+}
+
+.t4-cy-card strong,
+.t4-cy-card .value{
+    color:var(--cy-white);
+    font-size:13px;
+}
+
+/* working status */
+.t4-cy-card .working,
+.t4-cy-card .status{
+    color:#67e8f9 !important;
+    text-shadow:0 0 12px rgba(34,211,238,.45);
+}
+
+/* progress */
+.t4-cy-card progress{
+    width:100%;
+    height:5px;
+    margin-top:7px;
+    border:0;
+    border-radius:99px;
+    overflow:hidden;
+    background:rgba(148,163,184,.12);
+}
+
+.t4-cy-card progress::-webkit-progress-bar{
+    background:rgba(148,163,184,.12);
+    border-radius:99px;
+}
+
+.t4-cy-card progress::-webkit-progress-value{
+    background:linear-gradient(90deg,var(--cy),var(--cy-soft));
+    border-radius:99px;
+    box-shadow:0 0 10px rgba(34,211,238,.55);
+}
+
+/* action */
+.t4-cy-card .t4-action{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    min-height:42px;
+    margin-top:11px;
+    border:1px solid rgba(34,211,238,.35);
+    border-radius:13px;
+    background:linear-gradient(
+        180deg,
+        rgba(34,211,238,.15),
+        rgba(34,211,238,.055)
+    );
+    color:#a5f3fc !important;
+    font-size:12px;
+    font-weight:800;
+    letter-spacing:.8px;
+    text-decoration:none;
+    box-shadow:0 0 18px rgba(34,211,238,.07);
+}
+
+.t4-cy-card .t4-action:active{
+    transform:scale(.98);
+}
+
+/* order ID */
+.t4-cy-card .t4-order{
+    margin-top:8px;
+    text-align:center;
+    color:#64748b;
+    font-size:9px;
+    letter-spacing:1px;
+}
+
+/* phone */
+@media(max-width:600px){
+    #machines{
+        width:calc(100% - 20px);
+        margin-top:12px;
+        gap:13px;
+    }
+
+    .t4-cy-card{
+        padding:12px !important;
+        border-radius:20px !important;
+    }
+
+    .t4-cy-card .t4-machine-image,
+    .t4-cy-card .machine-image{
+        height:132px;
+    }
+
+    .t4-cy-card img{
+        max-height:120px;
+    }
+
+    .t4-cy-card h2{
+        font-size:17px !important;
+    }
+}
+</style>
+
+<style id="top4-high-fidelity-machines">
+
+:root{
+    --t4-bg:#050814;
+    --t4-card:#0b1020;
+    --t4-card2:#11182b;
+    --t4-text:#f7f9ff;
+    --t4-muted:#8e9ab4;
+    --t4-line:rgba(255,255,255,.10);
+    --t4-blue:#4cc9ff;
+    --t4-cyan:#63e6ff;
+    --t4-green:#53e58a;
+}
+
+body{
+    background:
+        radial-gradient(
+            circle at 50% -5%,
+            rgba(64,174,255,.16),
+            transparent 34%
+        ),
+        radial-gradient(
+            circle at 90% 30%,
+            rgba(120,88,255,.08),
+            transparent 30%
+        ),
+        #050814 !important;
+
+    color:var(--t4-text);
+
+    font-family:
+        Inter,
+        ui-sans-serif,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Roboto,
+        Arial,
+        sans-serif;
+}
+
+#machines{
+
+    width:min(100% - 18px,760px);
+
+    margin:0 auto;
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(2,minmax(0,1fr));
+
+    gap:11px;
+}
+
+.t4-cy-card{
+
+    position:relative;
+
+    overflow:hidden;
+
+    min-width:0;
+
+    border:
+        1px solid
+        rgba(112,151,201,.17);
+
+    border-radius:21px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255,255,255,.045),
+            transparent 34%
+        ),
+        linear-gradient(
+            180deg,
+            #11182a 0%,
+            #080c17 100%
+        );
+
+    box-shadow:
+        0 18px 42px rgba(0,0,0,.34),
+        inset 0 1px 0 rgba(255,255,255,.045);
+}
+
+.t4-cy-card:before{
+
+    content:"";
+
+    position:absolute;
+
+    inset:-70px -80px auto;
+
+    height:180px;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(60,197,255,.15),
+            transparent 67%
+        );
+
+    pointer-events:none;
+}
+
+.t4-stars{
+
+    position:absolute;
+
+    inset:8px 10px auto;
+
+    height:35px;
+
+    color:
+        rgba(126,220,255,.72);
+
+    font-size:8px;
+
+    letter-spacing:7px;
+
+    text-shadow:
+        0 0 9px
+        rgba(69,203,255,.9);
+
+    opacity:.8;
+
+    pointer-events:none;
+}
+
+.t4-stars span:nth-child(2){
+
+    position:absolute;
+
+    left:44%;
+
+    top:9px;
+
+    font-size:5px;
+}
+
+.t4-stars span:nth-child(3){
+
+    position:absolute;
+
+    right:4px;
+
+    top:19px;
+
+    font-size:6px;
+}
+
+.t4-card-head{
+
+    position:relative;
+
+    z-index:2;
+
+    padding:
+        14px 13px 4px;
+
+    display:flex;
+
+    align-items:flex-start;
+
+    justify-content:space-between;
+
+    gap:6px;
+}
+
+.t4-cy-name{
+
+    margin:0;
+
+    font-size:13px;
+
+    line-height:1.05;
+
+    font-weight:850;
+
+    letter-spacing:.01em;
+}
+
+.t4-cy-type{
+
+    margin-top:4px;
+
+    color:#71809d;
+
+    font-size:8px;
+
+    font-weight:700;
+
+    letter-spacing:.13em;
+
+    text-transform:uppercase;
+}
+
+.t4-status{
+
+    flex:none;
+
+    padding:5px 7px;
+
+    border-radius:99px;
+
+    font-size:8px;
+
+    line-height:1;
+
+    font-weight:850;
+
+    border:
+        1px solid
+        rgba(83,229,138,.20);
+
+    background:
+        rgba(83,229,138,.08);
+
+    color:#7bf0a8;
+
+    white-space:nowrap;
+}
+
+.t4-status.pending{
+
+    color:#ffe08a;
+
+    background:
+        rgba(255,211,87,.08);
+
+    border-color:
+        rgba(255,211,87,.18);
+}
+
+.t4-status.done{
+
+    color:#cbbaff;
+
+    background:
+        rgba(164,130,255,.08);
+
+    border-color:
+        rgba(164,130,255,.18);
+}
+
+.t4-machine-visual{
+
+    position:relative;
+
+    height:142px;
+
+    margin:
+        4px 9px 9px;
+
+    border-radius:17px;
+
+    overflow:hidden;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    background:
+        radial-gradient(
+            circle at 50% 50%,
+            rgba(56,189,248,.17),
+            transparent 47%
+        ),
+        radial-gradient(
+            circle at 50% 80%,
+            rgba(102,79,255,.09),
+            transparent 55%
+        ),
+        #070b16;
+
+    border:
+        1px solid
+        rgba(113,160,211,.12);
+}
+
+.t4-machine-visual:before{
+
+    content:"";
+
+    position:absolute;
+
+    width:125px;
+
+    height:125px;
+
+    border-radius:50%;
+
+    border:
+        1px solid
+        rgba(76,201,255,.12);
+
+    box-shadow:
+        0 0 28px
+        rgba(76,201,255,.08),
+
+        inset 0 0 30px
+        rgba(76,201,255,.05);
+}
+
+.t4-machine-visual:after{
+
+    content:"✦";
+
+    position:absolute;
+
+    top:12px;
+
+    left:17px;
+
+    color:#9eeaff;
+
+    font-size:8px;
+
+    text-shadow:
+        0 0 9px
+        #4cc9ff;
+}
+
+.t4-machine-visual img{
+
+    position:relative;
+
+    z-index:2;
+
+    width:94%;
+
+    height:94%;
+
+    object-fit:contain;
+
+    filter:
+        drop-shadow(
+            0 12px 18px
+            rgba(0,0,0,.62)
+        )
+        drop-shadow(
+            0 0 12px
+            rgba(61,197,255,.12)
+        );
+}
+
+.t4-stats{
+
+    padding:0 12px;
+}
+
+.t4-row{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    gap:8px;
+
+    padding:7px 0;
+
+    border-top:
+        1px solid
+        rgba(255,255,255,.055);
+}
+
+.t4-label{
+
+    color:#6f7d97;
+
+    font-size:8px;
+
+    font-weight:700;
+
+    letter-spacing:.07em;
+
+    text-transform:uppercase;
+}
+
+.t4-value{
+
+    color:#eaf1ff;
+
+    font-size:10px;
+
+    font-weight:800;
+
+    text-align:right;
+}
+
+.t4-price{
+
+    color:#ffffff;
+
+    font-size:14px;
+
+    font-weight:900;
+
+    letter-spacing:-.025em;
+}
+
+.t4-progress{
+
+    height:4px;
+
+    margin-top:3px;
+
+    overflow:hidden;
+
+    border-radius:99px;
+
+    background:
+        rgba(255,255,255,.07);
+}
+
+.t4-progress i{
+
+    display:block;
+
+    height:100%;
+
+    border-radius:inherit;
+
+    background:
+        linear-gradient(
+            90deg,
+            #25b9ff,
+            #65e7ff
+        );
+
+    box-shadow:
+        0 0 9px
+        rgba(64,204,255,.55);
+}
+
+.t4-progress-text{
+
+    margin-top:4px;
+
+    color:#72809a;
+
+    font-size:8px;
+
+    text-align:right;
+}
+
+.t4-action{
+
+    display:block;
+
+    margin:
+        10px 11px 11px;
+
+    padding:10px 12px;
+
+    border-radius:11px;
+
+    text-align:center;
+
+    text-decoration:none;
+
+    color:#021019;
+
+    background:
+        linear-gradient(
+            135deg,
+            #70e6ff,
+            #39baf4
+        );
+
+    box-shadow:
+        0 7px 18px
+        rgba(49,186,244,.16);
+
+    font-size:10px;
+
+    font-weight:900;
+
+    letter-spacing:.04em;
+}
+
+.t4-order{
+
+    padding:
+        0 12px 8px;
+
+    color:#56647e;
+
+    font-size:7px;
+
+    overflow:hidden;
+
+    text-overflow:ellipsis;
+
+    white-space:nowrap;
+}
+
+@media(max-width:520px){
+
+    #machines{
+
+        width:
+            min(
+                100% - 12px,
+                440px
+            );
+
+        grid-template-columns:1fr;
+
+        gap:10px;
+    }
+
+    .t4-cy-card{
+
+        border-radius:20px;
+    }
+
+    .t4-machine-visual{
+
+        height:164px;
+    }
+}
+
+@media(min-width:900px){
+
+    #machines{
+
+        grid-template-columns:
+            repeat(3,minmax(0,1fr));
+    }
+}
+
+</style>
+
+
+<style id="top4-final-cy-ui">
+:root{
+  --cy-bg:#050914;
+  --cy-panel:#09111f;
+  --cy-panel2:#0d1728;
+  --cy-line:rgba(34,211,238,.20);
+  --cy:#22d3ee;
+  --cy-blue:#38bdf8;
+  --cy-text:#f5fbff;
+  --cy-muted:#8da3b8;
+}
+
+html,body{
+  background:
+    radial-gradient(circle at 50% -10%,rgba(34,211,238,.12),transparent 38%),
+    linear-gradient(180deg,#040812 0%,#07101d 48%,#040811 100%) !important;
+  color:var(--cy-text) !important;
+}
+
+body{
+  min-height:100vh;
+  font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+}
+
+.t4-cy-shell{
+  width:min(100%,560px);
+  margin:0 auto;
+  padding:12px 13px 30px;
+}
+
+.t4-cy-topbar{
+  height:52px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 4px 10px;
+}
+
+.t4-cy-brand{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  font-weight:900;
+  letter-spacing:.12em;
+  font-size:15px;
+}
+
+.t4-cy-logo{
+  width:31px;
+  height:31px;
+  border-radius:10px;
+  display:grid;
+  place-items:center;
+  color:#00151d;
+  background:linear-gradient(145deg,#67e8f9,#22d3ee);
+  box-shadow:0 0 22px rgba(34,211,238,.35);
+}
+
+.t4-cy-nav{
+  display:flex;
+  gap:7px;
+}
+
+.t4-cy-nav a{
+  text-decoration:none;
+  color:#b9c9d8;
+  font-size:11px;
+  font-weight:800;
+  padding:8px 10px;
+  border:1px solid rgba(148,163,184,.12);
+  border-radius:10px;
+  background:rgba(255,255,255,.025);
+}
+
+.t4-cy-heading{
+  padding:8px 3px 15px;
+}
+
+.t4-cy-heading h1{
+  margin:0;
+  font-size:27px;
+  line-height:1.05;
+  letter-spacing:-.04em;
+}
+
+.t4-cy-heading p{
+  margin:7px 0 0;
+  color:var(--cy-muted);
+  font-size:12px;
+  line-height:1.5;
+}
+
+.t4-cy-grid{
+  display:grid;
+  gap:13px;
+}
+
+.t4-cy-card{
+  position:relative;
+  overflow:hidden;
+  min-height:225px;
+  border:1px solid var(--cy-line);
+  border-radius:23px;
+  padding:13px;
+  background:
+    radial-gradient(circle at 82% 5%,rgba(34,211,238,.13),transparent 28%),
+    linear-gradient(145deg,rgba(14,27,45,.98),rgba(5,11,21,.98));
+  box-shadow:
+    0 14px 40px rgba(0,0,0,.34),
+    inset 0 1px 0 rgba(255,255,255,.045);
+}
+
+.t4-cy-card:before,
+.t4-cy-card:after{
+  content:"✦";
+  position:absolute;
+  color:rgba(103,232,249,.78);
+  font-size:12px;
+  text-shadow:0 0 12px rgba(34,211,238,.8);
+  pointer-events:none;
+}
+
+.t4-cy-card:before{
+  top:17px;
+  right:19px;
+}
+
+.t4-cy-card:after{
+  bottom:67px;
+  left:17px;
+  font-size:8px;
+  opacity:.7;
+}
+
+.t4-cy-card-head{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:10px;
+  position:relative;
+  z-index:2;
+}
+
+.t4-cy-name{
+  display:flex;
+  flex-direction:column;
+  gap:3px;
+}
+
+.t4-cy-name strong{
+  font-size:18px;
+  letter-spacing:-.02em;
+}
+
+.t4-cy-name span{
+  color:#7f9bb1;
+  font-size:10px;
+  text-transform:uppercase;
+  letter-spacing:.14em;
+  font-weight:800;
+}
+
+.t4-cy-status{
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+  border:1px solid rgba(34,197,94,.28);
+  background:rgba(34,197,94,.08);
+  color:#6ee7a0;
+  border-radius:999px;
+  padding:6px 8px;
+  font-size:9px;
+  font-weight:900;
+  letter-spacing:.08em;
+}
+
+.t4-cy-status i{
+  width:5px;
+  height:5px;
+  border-radius:50%;
+  background:#4ade80;
+  box-shadow:0 0 8px #4ade80;
+}
+
+.t4-cy-machine{
+  position:relative;
+  height:126px;
+  margin:5px 0 7px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.t4-cy-machine:before{
+  content:"";
+  position:absolute;
+  width:170px;
+  height:78px;
+  border-radius:50%;
+  background:rgba(34,211,238,.13);
+  filter:blur(22px);
+}
+
+.t4-cy-machine img{
+  position:relative;
+  z-index:1;
+  width:min(74%,250px);
+  max-height:122px;
+  object-fit:contain;
+  filter:
+    drop-shadow(0 0 8px rgba(34,211,238,.18))
+    drop-shadow(0 12px 18px rgba(0,0,0,.55));
+}
+
+.t4-cy-spark{
+  position:absolute;
+  z-index:2;
+  color:#a5f3fc;
+  text-shadow:0 0 12px rgba(34,211,238,.9);
+}
+
+.t4-cy-spark.s1{top:13px;left:20%}
+.t4-cy-spark.s2{top:31px;right:18%;font-size:8px}
+.t4-cy-spark.s3{bottom:9px;right:24%;font-size:7px}
+
+.t4-cy-info{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:6px;
+  position:relative;
+  z-index:2;
+}
+
+.t4-cy-stat{
+  min-width:0;
+  padding:8px 8px 7px;
+  border:1px solid rgba(148,163,184,.09);
+  border-radius:11px;
+  background:rgba(255,255,255,.025);
+}
+
+.t4-cy-stat small{
+  display:block;
+  color:#71879a;
+  font-size:8px;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+  margin-bottom:3px;
+}
+
+.t4-cy-stat b{
+  display:block;
+  font-size:10px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.t4-cy-bottom{
+  margin-top:9px;
+  display:flex;
+  align-items:center;
+  gap:9px;
+  position:relative;
+  z-index:2;
+}
+
+.t4-cy-progress{
+  flex:1;
+}
+
+.t4-cy-progress-row{
+  display:flex;
+  justify-content:space-between;
+  color:#71879a;
+  font-size:8px;
+  margin-bottom:4px;
+}
+
+.t4-cy-track{
+  height:5px;
+  overflow:hidden;
+  border-radius:999px;
+  background:#172435;
+}
+
+.t4-cy-fill{
+  height:100%;
+  border-radius:inherit;
+  background:linear-gradient(90deg,#0891b2,#22d3ee,#67e8f9);
+  box-shadow:0 0 10px rgba(34,211,238,.45);
+}
+
+.t4-cy-action{
+  flex:0 0 auto;
+  text-decoration:none;
+  color:#00141b;
+  background:linear-gradient(135deg,#67e8f9,#22d3ee);
+  border-radius:11px;
+  padding:10px 12px;
+  font-size:9px;
+  font-weight:950;
+  letter-spacing:.04em;
+  box-shadow:0 0 18px rgba(34,211,238,.18);
+}
+
+.t4-cy-order{
+  margin-top:7px;
+  color:#50667a;
+  font-size:8px;
+  letter-spacing:.09em;
+}
+
+@media(max-width:380px){
+  .t4-cy-shell{padding-left:9px;padding-right:9px}
+  .t4-cy-card{padding:11px}
+  .t4-cy-machine{height:116px}
+  .t4-cy-machine img{max-height:112px}
+  .t4-cy-name strong{font-size:16px}
+  .t4-cy-action{padding:9px 9px}
+}
+
+@media(min-width:700px){
+  .t4-cy-grid{
+    grid-template-columns:repeat(2,1fr);
+  }
+}
+</style>
+
+</head>
+
+<body>
+
+<header>
+
+    <div class="logo">
+        TOP-<span>4</span>
+    </div>
+
+    <nav>
+        <a href="machines.html">Machines</a>
+        <a href="account.html">Account</a>
+    </nav>
+
+</header>
+
+<div class="container">
+
+    <h1>My Machines</h1>
+
+    <p class="subtitle">
+        Track your TOP-4 machines, payments and working progress.
+    </p>
+
+    <div class="summary">
+
+        <div class="summary-card">
+            <span>Total Machines</span>
+            <strong id="totalMachines">0</strong>
+        </div>
+
+        <div class="summary-card">
+            <span>Working Machines</span>
+            <strong id="workingMachines">0</strong>
+        </div>
+
+        <div class="summary-card">
+            <span>Total Invested</span>
+            <strong id="totalInvested">0 UGX</strong>
+        </div>
+
+    </div>
+
+    <button class="refresh" onclick="loadMachines()">
+        🔄 Refresh My Machines
+    </button>
+
+    <div class="t4-cy-shell">
+    <div class="t4-cy-topbar">
+        <div class="t4-cy-brand">
+            <div class="t4-cy-logo">CY</div>
+            <span>TOP-4</span>
+        </div>
+        <nav class="t4-cy-nav">
+            <a href="machines.html">Machines</a>
+            <a href="account.html">Account</a>
+        </nav>
+    </div>
+
+    <div class="t4-cy-heading">
+        <h1>My CY Machines</h1>
+        <p>Your virtual machines, working progress and current value.</p>
+    </div>
+
+    <div class="t4-cy-grid">
+        <div id="machines">
+
+        <div class="message">
+            Loading your machines...
+        </div>
+    </div>
+
+</div>
+
+
+    </div>
+</div>
+
+<script>
+
+const API_URL = "/api/orders";
+
+
+function getCurrentUser(){
+
+    const user =
+        localStorage.getItem("top4User");
+
+    if(!user){
+        return null;
+    }
+
+    try{
+        return JSON.parse(user);
+    }catch(error){
+        console.error("Invalid user data:",error);
+        return null;
+    }
+}
+
+function formatMoney(amount){
+
+    return Number(amount || 0).toLocaleString() + " UGX";
+
+}
+
+function formatDate(date){
+
+    if(!date){
+        return "—";
+    }
+
+    const d = new Date(date);
+
+    if(isNaN(d.getTime())){
+        return "—";
+    }
+
+    return d.toLocaleDateString(
+        "en-US",
+        {
+            month:"short",
+            day:"numeric",
+            year:"numeric"
+        }
+    );
+}
+
+function getDays(duration){
+
+    const match =
+        String(duration || "").match(/\d+/);
+
+    return match ? Number(match[0]) : 0;
+}
+
+function getProgress(order){
+
+    if(order.status !== "Verified"){
+        return 0;
+    }
+
+    if(!order.verifiedAt){
+        return 0;
+    }
+
+    const days =
+        getDays(order.duration);
+
+    if(days <= 0){
+        return 0;
+    }
+
+    const start =
+        new Date(order.verifiedAt).getTime();
+
+    const now =
+        Date.now();
+
+    const total =
+        days * 24 * 60 * 60 * 1000;
+
+    const elapsed =
+        now - start;
+
+    let progress =
+        (elapsed / total) * 100;
+
+    if(progress < 0){
+        progress = 0;
+    }
+
+    if(progress > 100){
+        progress = 100;
+    }
+
+    return Math.floor(progress);
+}
+
+function getCompletionDate(order){
+
+    if(order.status !== "Verified"){
+        return null;
+    }
+
+    if(!order.verifiedAt){
+        return null;
+    }
+
+    const days =
+        getDays(order.duration);
+
+    const date =
+        new Date(order.verifiedAt);
+
+    date.setDate(
+        date.getDate() + days
+    );
+
+    return date;
+}
+
+function getRemainingDays(order){
+
+    const completion =
+        getCompletionDate(order);
+
+    if(!completion){
+        return null;
+    }
+
+    const remaining =
+        completion.getTime() - Date.now();
+
+    if(remaining <= 0){
+        return 0;
+    }
+
+    return Math.ceil(
+        remaining / (24 * 60 * 60 * 1000)
+    );
+}
+
+function displayMachines(orders){
+
+    const container =
+        document.getElementById("machines");
+
+    if(!orders.length){
+
+        document.getElementById("totalMachines").textContent = "0";
+        document.getElementById("workingMachines").textContent = "0";
+        document.getElementById("totalInvested").textContent = "0 UGX";
+
+        container.innerHTML = `
+            <div style="
+                grid-column:1/-1;
+                text-align:center;
+                padding:45px 20px;
+                color:#8e9ab4;
+            ">
+                <div style="
+                    font-size:28px;
+                    color:#63e6ff;
+                    margin-bottom:10px;
+                    text-shadow:0 0 15px rgba(99,230,255,.7);
+                ">✦</div>
+
+                <strong style="color:#f7f9ff;font-size:15px;">
+                    No CY machines yet
+                </strong>
+
+                <div style="font-size:12px;margin-top:7px;">
+                    Your purchased machines will appear here.
+                </div>
+            </div>
+        `;
+
+        return;
+    }
+
+    let totalInvested = 0;
+    let working = 0;
+
+    orders.forEach(function(order){
+
+        totalInvested +=
+            Number(order.amount || 0);
+
+        if(
+            order.status === "Verified" &&
+            order.machineStatus === "Working"
+        ){
+            working++;
+        }
+
+    });
+
+    document.getElementById(
+        "totalMachines"
+    ).textContent = orders.length;
+
+    document.getElementById(
+        "workingMachines"
+    ).textContent = working;
+
+    document.getElementById(
+        "totalInvested"
+    ).textContent =
+        formatMoney(totalInvested);
+
+    container.innerHTML =
+        orders.map(function(order){
+
+            const rawName =
+                String(order.machine || "").toLowerCase();
+
+            let tier = "Starter";
+
+            let machineImage =
+                "images/starter-machine.jpg.webp";
+
+            if(rawName.includes("professional")){
+
+                tier = "Professional";
+
+                machineImage =
+                    "images/professional-machine.jpg.webp";
+
+            }else if(rawName.includes("advanced")){
+
+                tier = "Advanced";
+
+                machineImage =
+                    "images/advanced-machine.jpg.webp";
+
+            }else if(rawName.includes("premium")){
+
+                tier = "Premium";
+
+                machineImage =
+                    "images/premium-machine.jpg.webp";
+            }
+
+            const verified =
+                order.status === "Verified";
+
+            const progress =
+                verified
+                ? getProgress(order)
+                : 0;
+
+            const completion =
+                verified
+                ? getCompletionDate(order)
+                : null;
+
+            const remaining =
+                verified
+                ? getRemainingDays(order)
+                : null;
+
+            let statusClass = "";
+            let statusText = "PENDING";
+
+            if(!verified){
+
+                statusClass = "pending";
+                statusText = "PENDING";
+
+            }else if(
+                order.machineStatus === "Completed" ||
+                remaining === 0
+            ){
+
+                statusClass = "done";
+                statusText = "COMPLETED";
+
+            }else{
+
+                statusText = "WORKING";
+            }
+
+            return `
+
+            <article class="t4-cy-card">
+
+                <div class="t4-cy-card-head">
+                    <div class="t4-cy-name">
+                        <strong>CY ${String(order.machine || "CY Machine").replace(/^CY\s*/i, "")}</strong>
+                        <span>Virtual Machine</span>
+                    </div>
+
+                    <span class="t4-cy-status">
+                        <i></i> WORKING
+                    </span>
+                </div>
+
+                <div class="t4-cy-machine">
+                    <span class="t4-cy-spark s1">✦</span>
+                    <span class="t4-cy-spark s2">✧</span>
+                    <span class="t4-cy-spark s3">✦</span>
+
+                    <img
+                        src="${machineImage}"
+                        alt="CY ${String(order.machine || "CY Machine").replace(/^CY\s*/i, "")}"
+                    >
+                </div>
+
+                <div class="t4-cy-info">
+
+                    <div class="t4-cy-stat">
+                        <small>Period</small>
+                        <b>${order.duration || "—"}</b>
+                    </div>
+
+                    <div class="t4-cy-stat">
+                        <small>Value</small>
+                        <b>${formatMoney(order.amount)}</b>
+                    </div>
+
+                    <div class="t4-cy-stat">
+                        <small>Remaining</small>
+                        <b>${remaining === null ? "—" : remaining + " days"}</b>
+                    </div>
+
+                </div>
+
+                <div class="t4-cy-bottom">
+
+                    <div class="t4-cy-progress">
+                        <div class="t4-cy-progress-row">
+                            <span>Machine progress</span>
+                            <span>${progress}%</span>
+                        </div>
+
+                        <div class="t4-cy-track">
+                            <div
+                                class="t4-cy-fill"
+                                style="width:${Math.max(0, Math.min(100, progress))}%"
+                            ></div>
+                        </div>
+                    </div>
+
+                    <a
+                        class="t4-cy-action"
+                        href="machine-details.html?orderId=${encodeURIComponent(order.orderId || "")}"
+                    >
+                        VIEW MACHINE
+                    </a>
+
+                </div>
+
+                <div class="t4-cy-order">
+                    ORDER ${order.orderId || "—"}
+                </div>
+
+            </article>
+
+            `;
+
+        }).join("");
+}
+
+async function loadMachines(){
+
+    const currentUser =
+        getCurrentUser();
+
+    const container =
+        document.getElementById("machines");
+
+    if(
+        !currentUser ||
+        !currentUser.username
+    ){
+
+        container.innerHTML = `
+
+            <div class="message error">
+
+                Please log in first.
+
+                <br>
+
+                <a
+                    href="login.html"
+                    class="login-button">
+                    Go to Login
+                </a>
+
+            </div>
+
+        `;
+
+        return;
+    }
+
+    try{
+
+        const response =
+            await fetch(API_URL);
+
+        if(!response.ok){
+
+            throw new Error(
+                "HTTP " + response.status
+            );
+
+        }
+
+        const data =
+            await response.json();
+
+        const allOrders =
+            data.orders || [];
+
+        const myOrders =
+            allOrders.filter(
+                function(order){
+
+                    return String(
+                        order.username || ""
+                    ).trim().toLowerCase()
+
+                    ===
+
+                    String(
+                        currentUser.username
+                    ).trim().toLowerCase();
+
+                }
+            );
+
+        displayMachines(myOrders);
+
+    }catch(error){
+
+        console.error(
+            "TOP-4 machines error:",
+            error
+        );
+
+        container.innerHTML = `
+
+            <div class="message error">
+
+                Unable to load your machines.
+
+                <br><br>
+
+                Make sure the TOP-4 server is running.
+
+            </div>
+
+        `;
+
+    }
+
+}
+
+loadMachines();
+
+setInterval(
+    loadMachines,
+    30000
+);
+
+</script>
+
+</body>
+</html>
