@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Top 4 - Login</title>
+
+<style>
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(135deg, #0f172a, #111827);
+  color: white;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.card {
+  width: 100%;
+  max-width: 420px;
+  background: #1e293b;
+  padding: 30px;
+  border-radius: 18px;
+}
+
+h1 {
+  text-align: center;
+}
+
+.subtitle {
+  text-align: center;
+  color: #94a3b8;
+  margin-bottom: 25px;
+}
+
+label {
+  display: block;
+  margin-top: 15px;
+  margin-bottom: 6px;
+}
+
+input {
+  width: 100%;
+  padding: 13px;
+  border: none;
+  border-radius: 9px;
+  background: #334155;
+  color: white;
+  font-size: 16px;
+}
+
+button {
+  width: 100%;
+  padding: 14px;
+  margin-top: 20px;
+  border: none;
+  border-radius: 10px;
+  background: #22c55e;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.register {
+  background: #475569;
+}
+
+.message {
+  text-align: center;
+  margin-top: 15px;
+  color: #facc15;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="card">
+
+<h1>Top 4</h1>
+
+<p class="subtitle">
+Login to your account
+</p>
+
+<label>Username</label>
+
+<input
+id="username"
+type="text"
+placeholder="Enter username"
+>
+
+<label>Password</label>
+
+<input
+id="password"
+type="password"
+placeholder="Enter password"
+>
+
+<button onclick="login()">
+Login
+</button>
+
+<button
+class="register"
+onclick="window.location.href='register.html'">
+
+Create Account
+
+</button>
+
+<div
+id="message"
+class="message">
+</div>
+
+</div>
+
+<script>
+
+function login() {
+
+  const username =
+    document.getElementById("username").value.trim();
+
+  const password =
+    document.getElementById("password").value;
+
+  if (!username || !password) {
+
+    document.getElementById("message")
+      .textContent =
+      "Please enter your username and password.";
+
+    return;
+
+  }
+
+  const users =
+    JSON.parse(
+      localStorage.getItem("top4Users")
+    ) || [];
+
+  const user =
+    users.find(function(u) {
+
+      return (
+        u.username === username &&
+        u.password === password
+      );
+
+    });
+
+  if (!user) {
+
+    document.getElementById("message")
+      .textContent =
+      "Incorrect username or password.";
+
+    return;
+
+  }
+
+  localStorage.setItem(
+    "top4User",
+    JSON.stringify(user)
+  );
+
+  window.location.href =
+    "account.html";
+
+}
+
+</script>
+
+</body>
+</html>
