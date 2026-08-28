@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Top 4 - Create Account</title>
+
+<style>
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(135deg, #0f172a, #111827);
+  color: white;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.card {
+  width: 100%;
+  max-width: 450px;
+  background: #1e293b;
+  padding: 30px;
+  border-radius: 18px;
+}
+
+h1 {
+  text-align: center;
+}
+
+.subtitle {
+  text-align: center;
+  color: #94a3b8;
+  margin-bottom: 25px;
+}
+
+label {
+  display: block;
+  margin-top: 15px;
+  margin-bottom: 6px;
+}
+
+input {
+  width: 100%;
+  padding: 13px;
+  border: none;
+  border-radius: 9px;
+  background: #334155;
+  color: white;
+  font-size: 16px;
+}
+
+button {
+  width: 100%;
+  padding: 14px;
+  margin-top: 20px;
+  border: none;
+  border-radius: 10px;
+  background: #22c55e;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.back {
+  background: #475569;
+}
+
+.message {
+  text-align: center;
+  margin-top: 15px;
+  color: #facc15;
+}
+
+.bonus {
+  margin-top: 20px;
+  padding: 15px;
+  border-radius: 10px;
+  background: #334155;
+  text-align: center;
+  color: #facc15;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="card">
+
+<h1>Create Account</h1>
+
+<p class="subtitle">
+Join Top 4
+</p>
+
+<label>Username</label>
+
+<input
+id="username"
+type="text"
+placeholder="Choose a username"
+>
+
+<label>Password</label>
+
+<input
+id="password"
+type="password"
+placeholder="Create a password"
+>
+
+<label>Confirm Password</label>
+
+<input
+id="confirmPassword"
+type="password"
+placeholder="Confirm your password"
+>
+
+<div class="bonus">
+
+🎁 Signup Bonus: <strong>UGX 5,000</strong>
+
+<br>
+
+<small>
+Bonus is locked until the qualifying purchase condition is met.
+</small>
+
+</div>
+
+<button onclick="createAccount()">
+
+Create Account
+
+</button>
+
+<button
+class="back"
+onclick="window.location.href='login.html'">
+
+Back to Login
+
+</button>
+
+<div
+id="message"
+class="message">
+</div>
+
+</div>
+
+
+<script>
+
+function createAccount() {
+
+  const username =
+    document.getElementById("username")
+    .value.trim();
+
+  const password =
+    document.getElementById("password")
+    .value;
+
+  const confirmPassword =
+    document.getElementById("confirmPassword")
+    .value;
+
+
+  if (!username || !password || !confirmPassword) {
+
+    document.getElementById("message")
+      .textContent =
+      "Please fill in all fields.";
+
+    return;
+
+  }
+
+
+  if (password !== confirmPassword) {
+
+    document.getElementById("message")
+      .textContent =
+      "Passwords do not match.";
+
+    return;
+
+  }
+
+
+  const users =
+    JSON.parse(
+      localStorage.getItem("top4Users")
+    ) || [];
+
+
+  const exists =
+    users.some(function(user) {
+
+      return user.username === username;
+
+    });
+
+
+  if (exists) {
+
+    document.getElementById("message")
+      .textContent =
+      "Username already exists.";
+
+    return;
+
+  }
+
+
+  const user = {
+
+    username: username,
+
+    password: password,
+
+    wallet: 0,
+
+    income: 0,
+
+    signupBonus: 5000,
+
+    bonusLocked: true,
+
+    createdAt:
+      new Date().toISOString()
+
+  };
+
+
+  users.push(user);
+
+
+  localStorage.setItem(
+    "top4Users",
+    JSON.stringify(users)
+  );
+
+
+  localStorage.setItem(
+    "top4User",
+    JSON.stringify(user)
+  );
+
+
+  localStorage.setItem(
+    "top4Wallet",
+    "0"
+  );
+
+
+  localStorage.setItem(
+    "top4Income",
+    "0"
+  );
+
+
+  alert(
+    "Account created successfully! UGX 5,000 signup bonus has been added as a locked bonus."
+  );
+
+
+  window.location.href =
+    "account.html";
+
+}
+
+</script>
+
+</body>
+</html>
