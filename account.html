@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Account - Top 4</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  background: #0f172a;
+  color: white;
+}
+
+.container {
+  max-width: 600px;
+  margin: auto;
+}
+
+.card {
+  background: #1e293b;
+  padding: 22px;
+  border-radius: 16px;
+  margin-bottom: 18px;
+}
+
+h1 {
+  margin-bottom: 5px;
+}
+
+.muted {
+  color: #94a3b8;
+}
+
+.locked {
+  color: #facc15;
+}
+
+.available {
+  color: #22c55e;
+}
+
+button {
+  width: 100%;
+  padding: 14px;
+  margin-top: 10px;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.primary {
+  background: #22c55e;
+  color: white;
+}
+
+.secondary {
+  background: #334155;
+  color: white;
+}
+
+.logout {
+  background: #ef4444;
+  color: white;
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+  padding: 12px 0;
+  border-bottom: 1px solid #475569;
+}
+
+.row:last-child {
+  border-bottom: none;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>My Account</h1>
+
+<p class="muted">
+Welcome to your Top 4 account.
+</p>
+
+<div class="card">
+
+<h2>Balances</h2>
+
+<div class="row">
+<span>Wallet</span>
+<strong id="wallet">UGX 0</strong>
+</div>
+
+<div class="row">
+<span>Income Balance</span>
+<strong id="income">UGX 0</strong>
+</div>
+
+<div class="row">
+<span>Signup Bonus</span>
+<strong id="bonus" class="locked">
+UGX 5,000 Locked
+</strong>
+</div>
+
+</div>
+
+<div class="card">
+
+<h2>Quick Actions</h2>
+
+<button
+class="primary"
+onclick="window.location.href='buy-machines.html'">
+Buy Machine
+</button>
+
+<button
+class="secondary"
+onclick="window.location.href='deposit.html'">
+Deposit
+</button>
+
+<button
+class="secondary"
+onclick="window.location.href='withdraw.html'">
+Withdraw
+</button>
+
+<button
+class="secondary"
+onclick="window.location.href='referrals.html'">
+Invite & Earn
+</button>
+
+</div>
+
+<div class="card">
+
+<h2>Account</h2>
+
+<div class="row">
+<span>Username</span>
+<strong id="username">User</strong>
+</div>
+
+<div class="row">
+<span>Account Status</span>
+<strong class="available">Active</strong>
+</div>
+
+<button
+class="logout"
+onclick="logout()">
+Logout
+</button>
+
+</div>
+
+</div>
+
+<script>
+
+const user =
+JSON.parse(localStorage.getItem("top4User")) || null;
+
+if (user) {
+
+  document.getElementById("username").textContent =
+    user.username || user.name || "User";
+
+}
+
+const wallet =
+Number(localStorage.getItem("top4Wallet")) || 0;
+
+const income =
+Number(localStorage.getItem("top4Income")) || 0;
+
+const bonusUnlocked =
+localStorage.getItem("top4BonusUnlocked") === "true";
+
+document.getElementById("wallet").textContent =
+  wallet.toLocaleString() + " UGX";
+
+document.getElementById("income").textContent =
+  income.toLocaleString() + " UGX";
+
+const bonus =
+document.getElementById("bonus");
+
+if (bonusUnlocked) {
+
+  bonus.textContent = "UGX 5,000 Available";
+
+  bonus.className = "available";
+
+} else {
+
+  bonus.textContent = "UGX 5,000 Locked";
+
+  bonus.className = "locked";
+
+}
+
+function logout() {
+
+  localStorage.removeItem("top4User");
+
+  window.location.href = "login.html";
+
+}
+
+</script>
+
+</body>
+</html>
