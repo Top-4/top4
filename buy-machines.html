@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Buy Machine - Top 4</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:Arial,sans-serif;
+  background:linear-gradient(135deg,#0f172a,#111827);
+  color:white;
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding:20px
+}
+.card{
+  width:100%;
+  max-width:500px;
+  background:#1e293b;
+  border-radius:20px;
+  padding:35px;
+  text-align:center;
+  box-shadow:0 15px 40px rgba(0,0,0,.4)
+}
+h1{margin-bottom:20px}
+.info{
+  background:#334155;
+  border-radius:12px;
+  padding:20px;
+  margin-bottom:25px;
+  line-height:1.8
+}
+button{
+  width:100%;
+  padding:14px;
+  border:none;
+  border-radius:10px;
+  font-size:16px;
+  font-weight:bold;
+  cursor:pointer;
+  margin-top:10px
+}
+.confirm{background:#22c55e;color:white}
+.back{background:#475569;color:white}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+
+<h1>Buy Machine</h1>
+
+<div class="info">
+<p><strong>Selected Machine:</strong></p>
+<p id="machine">Machine</p>
+<p id="duration">Duration</p>
+</div>
+
+<button class="confirm" onclick="window.location.href='payment.html?machine=' + encodeURIComponent(new URLSearchParams(window.location.search).get('machine')) + '&duration=' + encodeURIComponent(new URLSearchParams(window.location.search).get('duration'))">
+Continue
+</button>
+
+<button class="back" onclick="history.back()">
+Back
+</button>
+
+</div>
+
+<script>
+const params = new URLSearchParams(window.location.search);
+const machine = params.get("machine");
+const duration = params.get("duration");
+
+if (machine) {
+  document.getElementById("machine").textContent = machine;
+}
+
+if (duration) {
+  document.getElementById("duration").textContent = duration;
+}
+</script>
+
+</body>
+</html>
