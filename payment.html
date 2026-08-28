@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Payment - Top 4</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    font-family:Arial,sans-serif;
+    background:linear-gradient(135deg,#0f172a,#111827);
+    color:white;
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:20px;
+}
+
+.card{
+    width:100%;
+    max-width:520px;
+    background:#1e293b;
+    border-radius:20px;
+    padding:35px;
+    box-shadow:0 15px 40px rgba(0,0,0,.4);
+}
+
+h1{
+    text-align:center;
+    margin-bottom:25px;
+}
+
+.section{
+    background:#334155;
+    border-radius:12px;
+    padding:20px;
+    margin-bottom:18px;
+}
+
+.row{
+    display:flex;
+    justify-content:space-between;
+    gap:15px;
+    padding:11px 0;
+    border-bottom:1px solid #475569;
+}
+
+.row:last-child{
+    border-bottom:none;
+}
+
+.label{
+    color:#cbd5e1;
+}
+
+.value{
+    font-weight:bold;
+    text-align:right;
+}
+
+.price{
+    color:#22c55e;
+    font-size:20px;
+}
+
+.note{
+    color:#cbd5e1;
+    line-height:1.6;
+    font-size:14px;
+    text-align:center;
+}
+
+.payment-button{
+    width:100%;
+    padding:14px;
+    border:none;
+    border-radius:10px;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+    margin-top:10px;
+    background:#475569;
+    color:white;
+}
+
+.payment-button:hover{
+    opacity:.9;
+}
+
+.payment-details{
+    margin-top:20px;
+    text-align:center;
+    display:none;
+}
+
+.payment-network{
+    font-weight:bold;
+    margin-top:10px;
+}
+
+.payment-number{
+    font-size:26px;
+    font-weight:bold;
+    margin:15px 0 5px;
+    color:#22c55e;
+}
+
+.registered-name{
+    font-size:16px;
+    font-weight:bold;
+    margin-bottom:15px;
+}
+
+.input-label{
+    display:block;
+    margin-top:18px;
+    margin-bottom:8px;
+    color:#cbd5e1;
+    text-align:left;
+    font-size:14px;
+}
+
+input{
+    width:100%;
+    padding:14px;
+    border:1px solid #64748b;
+    border-radius:10px;
+    background:#0f172a;
+    color:white;
+    font-size:16px;
+    outline:none;
+}
+
+input:focus{
+    border-color:#22c55e;
+}
+
+.confirm{
+    width:100%;
+    padding:14px;
+    border:none;
+    border-radius:10px;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+    margin-top:10px;
+    background:#22c55e;
+    color:white;
+}
+
+.confirm:disabled{
+    background:#64748b;
+    cursor:not-allowed;
+}
+
+.back{
+    width:100%;
+    padding:14px;
+    border:none;
+    border-radius:10px;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+    margin-top:10px;
+    background:#475569;
+    color:white;
+}
+
+.message{
+    margin-top:15px;
+    text-align:center;
+    font-weight:bold;
+    line-height:1.5;
+}
+
+.error{
+    color:#f87171;
+}
+
+.success{
+    color:#22c55e;
+}
+
+.loading{
+    color:#facc15;
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+
+<h1>Payment</h1>
+
+<div class="section">
+
+<div class="row">
+<span class="label">Selected Machine</span>
+<span class="value" id="machine">—</span>
+</div>
+
+<div class="row">
+<span class="label">Working Duration</span>
+<span class="value" id="duration">—</span>
+</div>
+
+<div class="row">
+<span class="label">Machine Price</span>
+<span class="value price" id="price">—</span>
+</div>
+
+</div>
+
+<div class="section">
+
+<p class="note">
+<strong>Choose Payment Method</strong>
+</p>
+
+<button
+class="payment-button"
+onclick="showPayment('airtel')">
+Airtel Money
+</button>
+
+<button
+class="payment-button"
+onclick="showPayment('mtn')">
+MTN Mobile Money
+</button>
+
+<div
+id="paymentDetails"
+class="payment-details">
+
+<p class="note">
+Send your payment to:
+</p>
+
+<p
+id="paymentNetwork"
+class="payment-network">
+—
+</p>
+
+<div
+id="paymentNumber"
+class="payment-number">
+—
+</div>
+
+<div
+id="registeredName"
+class="registered-name">
+—
+</div>
+
+<p class="note">
+Please verify the number and registered name before making payment.
+</p>
+
+<label
+class="input-label"
+for="senderNumber">
+Your Mobile Money Number
+</label>
+
+<input
+type="tel"
+id="senderNumber"
+placeholder="Enter the number you are paying from"
+maxlength="15"
+autocomplete="tel">
+
+</div>
+
+</div>
+
+<button
+class="confirm"
+id="confirmPayment"
+onclick="confirmPayment()"
+disabled>
+Submit Payment for Verification
+</button>
+
+<p
+id="message"
+class="message">
+</p>
+
+<button
+class="back"
+onclick="history.back()">
+Back
+</button>
+
+</div>
+
+<script>
+
+const params = new URLSearchParams(window.location.search);
+
+const machine =
+    params.get("machine") || "Unknown Machine";
+
+const duration =
+    params.get("duration") || "Unknown Duration";
+
+
+const plans = {
+
+    "Starter Machine": {
+        price: 35000
+    },
+
+    "Professional Machine": {
+        price: 105000
+    },
+
+    "Advanced Machine": {
+        price: 250000
+    },
+
+    "Premium Machine": {
+        price: 510000
+    }
+
+};
+
+
+document.getElementById("machine").textContent = machine;
+
+document.getElementById("duration").textContent = duration;
+
+
+let amount = 0;
+
+if (plans[machine]) {
+
+    amount = plans[machine].price;
+
+    document.getElementById("price").textContent =
+        amount.toLocaleString() + " UGX";
+
+}
+
+
+let payments = {};
+
+let selectedPaymentMethod = null;
+
+
+async function loadPayments(){
+
+    try{
+
+        const response =
+            await fetch("/api/payments");
+
+        if(!response.ok){
+
+            throw new Error(
+                "HTTP " + response.status
+            );
+
+        }
+
+        const data =
+            await response.json();
+
+        if(!data.success){
+
+            throw new Error(
+                "Unable to load payment numbers"
+            );
+
+        }
+
+        payments = data.payments || {};
+
+    }catch(error){
+
+        console.error(error);
+
+        document.getElementById("message").textContent =
+            "Unable to load payment information.";
+
+        document.getElementById("message").className =
+            "message error";
+
+    }
+
+}
+
+
+function showPayment(method){
+
+    if(!payments[method]){
+
+        document.getElementById("message").textContent =
+            "This payment method is currently unavailable.";
+
+        document.getElementById("message").className =
+            "message error";
+
+        return;
+
+    }
+
+
+    selectedPaymentMethod = method;
+
+    const payment =
+        payments[method];
+
+
+    document.getElementById("paymentDetails").style.display =
+        "block";
+
+
+    document.getElementById("paymentNetwork").textContent =
+        payment.name;
+
+
+    document.getElementById("paymentNumber").textContent =
+        payment.number;
+
+
+    document.getElementById("registeredName").textContent =
+        "Registered Name: " +
+        payment.registeredName;
+
+
+    document.getElementById("message").textContent = "";
+
+    document.getElementById("message").className =
+        "message";
+
+
+    checkForm();
+
+}
+
+
+function checkForm(){
+
+    const senderNumber =
+        document.getElementById("senderNumber")
+        .value
+        .trim();
+
+
+    const button =
+        document.getElementById("confirmPayment");
+
+
+    button.disabled =
+        !selectedPaymentMethod ||
+        !senderNumber ||
+        !amount;
+
+}
+
+
+document.getElementById("senderNumber")
+.addEventListener(
+    "input",
+    checkForm
+);
+
+
+async function confirmPayment(){
+
+    const button =
+        document.getElementById("confirmPayment");
+
+
+    const message =
+        document.getElementById("message");
+
+
+    const senderNumber =
+        document.getElementById("senderNumber")
+        .value
+        .trim();
+
+
+    if(!selectedPaymentMethod){
+
+        message.textContent =
+            "Please choose a payment method.";
+
+        message.className =
+            "message error";
+
+        return;
+
+    }
+
+
+    if(!senderNumber){
+
+        message.textContent =
+            "Please enter your Mobile Money number.";
+
+        message.className =
+            "message error";
+
+        return;
+
+    }
+
+
+    if(!amount){
+
+        message.textContent =
+            "Invalid machine price.";
+
+        message.className =
+            "message error";
+
+        return;
+
+    }
+
+
+    button.disabled = true;
+
+    button.textContent =
+        "Submitting Payment...";
+
+
+    message.textContent =
+        "Please wait...";
+
+    message.className =
+        "message loading";
+
+
+    try{
+
+        const currentUser =
+            JSON.parse(
+                localStorage.getItem("top4User")
+            );
+
+
+        if(
+            !currentUser ||
+            !currentUser.username
+        ){
+
+            throw new Error(
+                "Please log in before submitting a payment."
+            );
+
+        }
+
+
+        const response =
+            await fetch("/api/orders", {
+
+                method:"POST",
+
+                headers:{
+                    "Content-Type":
+                        "application/json"
+                },
+
+                body:JSON.stringify({
+
+                    username:
+                        currentUser.username,
+
+                    machine:
+                        machine,
+
+                    duration:
+                        duration,
+
+                    amount:
+                        amount,
+
+                    paymentMethod:
+                        payments[
+                            selectedPaymentMethod
+                        ].name,
+
+                    paymentNumber:
+                        payments[
+                            selectedPaymentMethod
+                        ].number,
+
+                    senderNumber:
+                        senderNumber
+
+                })
+
+            });
+
+
+        const data =
+            await response.json();
+
+
+        if(!response.ok || !data.success){
+
+            throw new Error(
+                data.message ||
+                "Payment submission failed."
+            );
+
+        }
+
+
+        message.innerHTML =
+            "✅ Payment submitted successfully!<br>" +
+            "Order ID: " +
+            data.order.orderId +
+            "<br>Your payment is waiting for verification.";
+
+
+        message.className =
+            "message success";
+
+
+        button.textContent =
+            "Payment Submitted";
+
+
+        button.disabled = true;
+
+
+    }catch(error){
+
+        console.error(error);
+
+
+        message.textContent =
+            error.message ||
+            "Payment submission failed.";
+
+
+        message.className =
+            "message error";
+
+
+        button.textContent =
+            "Submit Payment for Verification";
+
+
+        button.disabled = false;
+
+    }
+
+}
+
+
+loadPayments();
+
+</script>
+
+</body>
+</html>
